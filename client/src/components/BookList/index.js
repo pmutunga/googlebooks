@@ -9,13 +9,13 @@ export function BookList({ children }) {
   return <ul className="list-group">{children}</ul>;
 }
 
-// BookListItem renders a bootstrap list item containing data from the recipe api call
+// BookListItem renders a bootstrap list item containing data from the book api call
 export function BookListItem({
   thumbnail = "https://placehold.it/300x300",
   title,
   authors,
   description,
-  href
+  link
 }) {
   return (
     <li className="list-group-item">
@@ -28,7 +28,7 @@ export function BookListItem({
             <h3>{title}</h3>
             <p>Authors: {authors}</p>
             <p>Description: {description}</p>
-            <a rel="noreferrer noopener" target="_blank" href={href}>
+            <a rel="noreferrer noopener" target="_blank" href={link}>
              Preview
             </a>
           </Col>

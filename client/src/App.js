@@ -15,7 +15,12 @@ class App extends Component {
 
   // When this component mounts, search for the book "P is for Potty"
   componentDidMount() {
-    this.searchBooks("P is for Potty");
+    let query = "P is for Potty";
+    API.searchBooks(query)
+      .then(res => {
+               this.setState({ books: res.data.items});
+      })
+      .catch(err => console.log(err));
   }
 
   searchBooks = query => {
@@ -36,26 +41,26 @@ class App extends Component {
   handleFormSubmit = event => {
     // When the form is submitted, prevent its default behavior, get books update the books state
     event.preventDefault();
-    console.log(
-      "handleFormSubmit in client/src/app.js captured this user input " +
-        this.state.bookSearch
-    );
+    // console.log(
+    //   "handleFormSubmit in client/src/app.js captured this user input " +
+    //     this.state.bookSearch
+    // );
     API.searchBooks(this.state.bookSearch)
       .then(res => {
-        console.log(res.data.items);
+        // console.log(res.data.items);
         var bookSearchResults = res.data.items;
-        console.log(bookSearchResults);
+        // console.log(bookSearchResults);
         console.log(bookSearchResults.length);
         for (var i = 0; i < bookSearchResults.length; i++) {
-          console.log("-------------------------------------------")
-          console.log("Title: " + bookSearchResults[i].volumeInfo.title);
-          console.log("Authors: " + bookSearchResults[i].volumeInfo.authors);
+          let authorexist = !!bookSearchResults[i].volumeInfo.authors;
+          let authors = authorexist? bookSearchResults[i].volumeInfo.authors.join(", "):"no authors found";
+          console.log("Authors: " + authors);
           console.log("Description: " + bookSearchResults[i].volumeInfo.description);
           console.log("Image: " + bookSearchResults[i].volumeInfo.imageLinks.thumbnail);
           console.log("Href: " + bookSearchResults[i].volumeInfo.infoLink);
           console.log("==========================================");
         }
-        this.setState({ books: res.data });
+        this.setState({ books: res.data.items});
       })
       .catch(err => console.log(err));
   };
@@ -104,12 +109,12 @@ class App extends Component {
                   {this.state.books.map(book => {
                     return (
                       <BookListItem
-                        key={book.title}
-                        title={book.title}
-                        href={book.href}
-                        authors={book.authors}
-                        description={book.description}
-                        thumbnail={book.thumbnail}
+                        key={book.id}
+                        title={book.volumeInfo.title}
+                        link={book.volumeInfo.infoLink}
+                        authors={book.volumeInfo.authors}
+                        description={book.volumeInfo.description}
+                        thumbnail={book.volumeInfo.imageLinks.smallThumbnail}
                       />
                     );
                   })}
