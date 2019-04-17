@@ -5,6 +5,7 @@ import DeleteButton from "../components/DeleteButton";
 import { BookList, BookListItem } from "../components/BookList";
 import { Container, Row, Col } from "../components/Grid";
 import Nav from "../components/Nav";
+import SaveButton from "../components/SaveButton";
 
 class Saved extends Component {
   state = {
@@ -26,6 +27,8 @@ class Saved extends Component {
     <div>
       <Nav/>
    <h1> Heloo World!</h1>
+   <SaveButton />
+   <DeleteButton />
    </div>
     );
   }

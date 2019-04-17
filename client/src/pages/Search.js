@@ -6,13 +6,17 @@ import { BookList, BookListItem } from "../components/BookList";
 import { Container, Row, Col } from "../components/Grid";
 import Nav from "../components/Nav";
 import Jumbotron from "../components/Jumbotron";
-import SaveButton from "../components/SaveButton";
-import DeleteButton from "../components/DeleteButton";
 
 class Search extends Component {
   state = {
     books: [],
-    bookSearch: ""
+    bookSearch: "",
+    title: "",
+    authors: "",
+    description: "",
+    link: "",
+    thumbnail: "",
+    key: ""
   };
 
   // When this component mounts, search for the book "P is for Potty"
@@ -20,7 +24,7 @@ class Search extends Component {
     let query = "P is for Potty";
     API.searchBooks(query)
       .then(res => {
-               this.setState({ books: res.data.items});
+        this.setState({ books: res.data.items });
       })
       .catch(err => console.log(err));
   }
@@ -49,21 +53,23 @@ class Search extends Component {
     // );
     API.searchBooks(this.state.bookSearch)
       .then(res => {
-        // console.log(res.data.items);
-        var bookSearchResults = res.data.items;
-        // console.log(bookSearchResults);
-        console.log(bookSearchResults.length);
-        for (var i = 0; i < bookSearchResults.length; i++) {
-          let authorexist = !!bookSearchResults[i].volumeInfo.authors;
-          let authors = authorexist? bookSearchResults[i].volumeInfo.authors.join(", "):"no authors found";
-          console.log("Authors: " + authors);
-          console.log("Description: " + bookSearchResults[i].volumeInfo.description);
-          console.log("Image: " + bookSearchResults[i].volumeInfo.imageLinks.thumbnail);
-          console.log("Href: " + bookSearchResults[i].volumeInfo.infoLink);
-          console.log("==========================================");
-        }
-        this.setState({ books: res.data.items});
+        this.setState({ books: res.data.items });
       })
+      .catch(err => console.log(err));
+  };
+
+  handleSaveBook = event => {
+    event.preventDefault();
+    console.log("Button clicked");
+    API.saveBook({
+      //I have book data in books
+      title: this.state.title,
+      authors: this.state.authors,
+      description: this.state.description,
+      link: this.state.link,
+      thumbnail: this.state.thumbnail
+    })
+      .then(res => this.loadBooks())
       .catch(err => console.log(err));
   };
 

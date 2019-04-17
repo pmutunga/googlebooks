@@ -4,7 +4,6 @@ import { Container, Row, Col } from "../Grid";
 import DeleteButton from "../DeleteButton";
 import SaveButton from "../SaveButton";
 
-
 // Exporting both BookList and BookListItem from this file
 
 // BookList renders a bootstrap list item
@@ -18,7 +17,8 @@ export function BookListItem({
   title,
   authors,
   description,
-  link
+  link,
+  handleSaveBook
 }) {
   return (
     <li className="list-group-item">
@@ -28,10 +28,7 @@ export function BookListItem({
             <Thumbnail src={thumbnail} />
           </Col>
           <Col size="xs-8 sm-9">
-           
-              <SaveButton />
-              <DeleteButton />
-           
+            <button onClick={handleSaveBook} className="save-btn btn btn-outline-primary">Save</button>
 
             <h3>{title}</h3>
             <p>Authors: {authors}</p>

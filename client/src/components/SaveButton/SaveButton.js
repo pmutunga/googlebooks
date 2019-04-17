@@ -6,7 +6,7 @@ import "./SaveButton.css";
 // That way we don't have to define them all individually
 function SaveButton(props) {
   return (
-    <span className="save-btn btn btn-outline-primary" {...props} role="button" tabIndex="0">
+    <span  className="save-btn btn btn-outline-primary" {...props} role="button" tabIndex="0">
       Save
     </span>
   );
