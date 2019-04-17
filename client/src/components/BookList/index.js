@@ -1,6 +1,9 @@
 import React from "react";
 import Thumbnail from "../Thumbnail";
 import { Container, Row, Col } from "../Grid";
+import DeleteButton from "../DeleteButton";
+import SaveButton from "../SaveButton";
+
 
 // Exporting both BookList and BookListItem from this file
 
@@ -25,11 +28,16 @@ export function BookListItem({
             <Thumbnail src={thumbnail} />
           </Col>
           <Col size="xs-8 sm-9">
+           
+              <SaveButton />
+              <DeleteButton />
+           
+
             <h3>{title}</h3>
             <p>Authors: {authors}</p>
             <p>Description: {description}</p>
             <a rel="noreferrer noopener" target="_blank" href={link}>
-             Preview
+              Preview
             </a>
           </Col>
         </Row>
