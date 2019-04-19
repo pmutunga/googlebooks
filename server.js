@@ -10,6 +10,7 @@ const apiRoutes = require("./routes/apiRoutes");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Serve up static assets (usually on heroku)
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
@@ -22,7 +23,7 @@ mongoose.connect(
 });
 
 // Use apiRoutes
-app.use(apiRoutes);
+app.use("/api", apiRoutes);
 
 // Send every request to the React app
 // Define any API routes before this runs

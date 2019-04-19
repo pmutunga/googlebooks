@@ -1,8 +1,7 @@
 import React from "react";
 import Thumbnail from "../Thumbnail";
 import { Container, Row, Col } from "../Grid";
-import DeleteButton from "../DeleteButton";
-import SaveButton from "../SaveButton";
+
 
 // Exporting both BookList and BookListItem from this file
 

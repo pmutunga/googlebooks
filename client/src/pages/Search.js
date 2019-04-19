@@ -51,9 +51,10 @@ class Search extends Component {
     //   "handleFormSubmit in client/src/app.js captured this user input " +
     //     this.state.bookSearch
     // );
-    API.searchBooks(this.state.bookSearch)
+    API.searchBooks({q: this.state.bookSearch})
       .then(res => {
-        this.setState({ books: res.data.items });
+        console.log(res.items);
+        this.setState({ books: res.items });
       })
       .catch(err => console.log(err));
   };
@@ -61,14 +62,22 @@ class Search extends Component {
   handleSaveBook = event => {
     event.preventDefault();
     console.log("Button clicked");
-    API.saveBook({
-      //I have book data in books
-      title: this.state.title,
-      authors: this.state.authors,
-      description: this.state.description,
-      link: this.state.link,
-      thumbnail: this.state.thumbnail
-    })
+    const newBook = {
+      title: "this.state.title",
+      authors: "this.state.authors",
+      description: "this.state.description",
+      link: "this.state.link",
+      thumbnail: "this.state.thumbnail"
+    }
+    API.saveBook(newBook)
+    // API.saveBook({
+    //   //I have book data in books
+    //   title: this.state.title,
+    //   authors: this.state.authors,
+    //   description: this.state.description,
+    //   link: this.state.link,
+    //   thumbnail: this.state.thumbnail
+    // })
       .then(res => this.loadBooks())
       .catch(err => console.log(err));
   };
@@ -123,6 +132,7 @@ class Search extends Component {
                         authors={book.volumeInfo.authors}
                         description={book.volumeInfo.description}
                         thumbnail={book.volumeInfo.imageLinks.smallThumbnail}
+                        handleSaveBook={this.handleSaveBook}
                       />
                     );
                   })}
