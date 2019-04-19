@@ -8,23 +8,31 @@ import Nav from "../components/Nav";
 import Jumbotron from "../components/Jumbotron";
 
 class Search extends Component {
-  state = {
-    books: [],
-    bookSearch: "",
-    title: "",
-    authors: "",
-    description: "",
-    link: "",
-    thumbnail: "",
-    key: ""
-  };
+  constructor() {
+    super();
+
+    // This binding is necessary to make `this` work in the callback
+    this.handleSaveBook = this.handleSaveBook.bind(this);
+
+    this.state = {
+      books: [],
+      bookSearch: "",
+      title: "",
+      authors: "",
+      description: "",
+      link: "",
+      thumbnail: "",
+      key: "",
+     
+    };
+  }
 
   // When this component mounts, search for the book "P is for Potty"
   componentDidMount() {
     let query = "P is for Potty";
-    API.searchBooks(query)
+    API.searchBooks({ query })
       .then(res => {
-        this.setState({ books: res.data.items });
+        this.setState({ result: res.data });
       })
       .catch(err => console.log(err));
   }
@@ -47,11 +55,12 @@ class Search extends Component {
   handleFormSubmit = event => {
     // When the form is submitted, prevent its default behavior, get books update the books state
     event.preventDefault();
+
     // console.log(
     //   "handleFormSubmit in client/src/app.js captured this user input " +
     //     this.state.bookSearch
     // );
-    API.searchBooks({q: this.state.bookSearch})
+    API.searchBooks({ q: this.state.bookSearch })
       .then(res => {
         console.log(res.items);
         this.setState({ books: res.items });
@@ -60,25 +69,24 @@ class Search extends Component {
   };
 
   handleSaveBook = event => {
-    event.preventDefault();
+    // event.preventDefault();
     console.log("Button clicked");
+ 
+    // const { title, authors, description, link, thumbnail } = book;
+
+    console.log("handleSaveBook will save this book: " + this.state)
     const newBook = {
-      title: "this.state.title",
-      authors: "this.state.authors",
-      description: "this.state.description",
-      link: "this.state.link",
-      thumbnail: "this.state.thumbnail"
-    }
+      //I have book data in books
+      id: this.id,
+      title: this.title,
+      authors: this.authors,
+      description: this.description,
+      link: this.link,
+      thumbnail: this.thumbnail
+    };
     API.saveBook(newBook)
-    // API.saveBook({
-    //   //I have book data in books
-    //   title: this.state.title,
-    //   authors: this.state.authors,
-    //   description: this.state.description,
-    //   link: this.state.link,
-    //   thumbnail: this.state.thumbnail
-    // })
-      .then(res => this.loadBooks())
+      // .then(res => this.loadBooks())
+      .then(console.log("saveBook would like to to save this book" + newBook))
       .catch(err => console.log(err));
   };
 
@@ -125,6 +133,7 @@ class Search extends Component {
                 <BookList>
                   {this.state.books.map(book => {
                     return (
+                      <div>
                       <BookListItem
                         key={book.id}
                         title={book.volumeInfo.title}
@@ -133,7 +142,10 @@ class Search extends Component {
                         description={book.volumeInfo.description}
                         thumbnail={book.volumeInfo.imageLinks.smallThumbnail}
                         handleSaveBook={this.handleSaveBook}
+                        
                       />
+                     
+                      </div>
                     );
                   })}
                 </BookList>
