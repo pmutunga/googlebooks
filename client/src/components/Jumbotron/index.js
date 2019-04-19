@@ -15,6 +15,7 @@ import "./style.css";
 function Jumbotron() {
   return(
   <div className="jumbotron text-center">
+  <div className = "textWrapper">
     <h1 className="display-4">React Google Books Search</h1>
     <p className="lead">
       Search for and Save Books of Interest.
@@ -23,6 +24,7 @@ function Jumbotron() {
     <p className="small">
       <a href="https://books.google.com/">Powered by Google Books</a>
     </p>
+    </div>
   </div>
   )
 }

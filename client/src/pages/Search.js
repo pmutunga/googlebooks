@@ -16,7 +16,7 @@ class Search extends Component {
 
     this.state = {
       books: [],
-      bookSearch: "",
+      bookSearch: "react",
       title: "",
       authors: "",
       description: "",
@@ -29,16 +29,18 @@ class Search extends Component {
 
   // When this component mounts, search for the book "P is for Potty"
   componentDidMount() {
-    let query = "P is for Potty";
-    API.searchBooks({ query })
-      .then(res => {
-        this.setState({ result: res.data });
-      })
-      .catch(err => console.log(err));
+    // https://www.googleapis.com/books/v1/volumes?q=p+is+for+potty
+    //not sure why this renders as https://www.googleapis.com/books/v1/volumes?query=react 
+    API.searchBooks({ q: this.state.bookSearch })
+    .then(res => {
+      console.log(res.items);
+      this.setState({ books: res.items });
+    })
+    .catch(err => console.log(err));
   }
 
   searchBooks = query => {
-    API.searchBooks(query)
+    API.searchBooks({q: query})
       .then(res => this.setState({ result: res.data }))
       .catch(err => console.log(err));
   };
