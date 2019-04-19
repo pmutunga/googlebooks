@@ -1,40 +1,49 @@
 import React, { Component } from "react";
-import Input from "../components/Input";
-import Button from "../components/Button";
 import API from "../utils/API";
 import { BookList, BookListItem } from "../components/BookList";
 import { Container, Row, Col } from "../components/Grid";
 import Nav from "../components/Nav";
-import Jumbotron from "../components/Jumbotron";
-
 
 class Saved extends Component {
-  state = {
-    books: [],
-    title: "",
-    author: "",
-    synopsis: ""
-  };
+  constructor() {
+    super();
 
-  componentDidMount() {
-    this.loadBooks();
+    // This binding is necessary to make `this` work in the callback
+    this.handleSaveBook = this.handleSaveBook.bind(this);
+
+    this.state = {
+      books: [],
+      bookSearch: "react",
+      title: "",
+      authors: "",
+      description: "",
+      link: "",
+      thumbnail: "",
+      key: ""
+    };
   }
 
-  loadBooks = () => {
-    API.getBooks()
-      .then(res =>
-        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-      )
+  // When this component mounts, search for the book "P is for Potty"
+  componentDidMount() {
+    // https://www.googleapis.com/books/v1/volumes?q=p+is+for+potty
+    //not sure why this renders as https://www.googleapis.com/books/v1/volumes?query=react
+    API.searchBooks({ q: this.state.bookSearch })
+      .then(res => {
+        console.log(res.items);
+        this.setState({ books: res.items });
+      })
       .catch(err => console.log(err));
-  };
+  }
 
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
+  searchBooks = query => {
+    API.searchBooks({ q: query })
+      .then(res => this.setState({ result: res.data }))
       .catch(err => console.log(err));
   };
 
   handleInputChange = event => {
+    // Destructure the name and value properties off of event.target
+    // Update the appropriate state
     const { name, value } = event.target;
     this.setState({
       [name]: value
@@ -42,76 +51,75 @@ class Saved extends Component {
   };
 
   handleFormSubmit = event => {
+    // When the form is submitted, prevent its default behavior, get books update the books state
     event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
+
+    // console.log(
+    //   "handleFormSubmit in client/src/app.js captured this user input " +
+    //     this.state.bookSearch
+    // );
+    API.searchBooks({ q: this.state.bookSearch })
+      .then(res => {
+        console.log(res.items);
+        this.setState({ books: res.items });
       })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
-    }
+      .catch(err => console.log(err));
+  };
+
+  handleSaveBook = event => {
+    // event.preventDefault();
+    console.log("Button clicked");
+
+    // const { title, authors, description, link, thumbnail } = book;
+
+    console.log("handleSaveBook will save this book: " + this.state);
+    const newBook = {
+      //I have book data in books
+      id: this.id,
+      title: this.title,
+      authors: this.authors,
+      description: this.description,
+      link: this.link,
+      thumbnail: this.thumbnail
+    };
+    API.saveBook(newBook)
+      // .then(res => this.loadBooks())
+      .then(console.log("saveBook would like to to save this book" + newBook))
+      .catch(err => console.log(err));
   };
 
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-            <Jumbotron>
-              <h1>What Books Should I Read?</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                value={this.state.title}
-                onChange={this.handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                value={this.state.synopsis}
-                onChange={this.handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
-              <FormBtn
-                disabled={!(this.state.author && this.state.title)}
-                onClick={this.handleFormSubmit}
-              >
-                Submit Book
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {this.state.books.length ? (
-              <List>
-                {this.state.books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
-      </Container>
+      <div>
+        <Nav />
+        <Container>
+          <Row>
+            <Col size="xs-12">
+              {!this.state.books.length ? (
+                <h1 className="text-center">No books to Display</h1>
+              ) : (
+                <BookList>
+                  {this.state.books.map(book => {
+                    return (
+                      <div>
+                        <BookListItem
+                          key={book.id}
+                          title={book.volumeInfo.title}
+                          link={book.volumeInfo.infoLink}
+                          authors={book.volumeInfo.authors}
+                          description={book.volumeInfo.description}
+                          thumbnail={book.volumeInfo.imageLinks.smallThumbnail}
+                          handleSaveBook={this.handleSaveBook}
+                        />
+                      </div>
+                    );
+                  })}
+                </BookList>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
