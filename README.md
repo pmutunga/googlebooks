@@ -28,7 +28,9 @@ This is a React-based Google Books Search app. I created React components, worke
 * `*` (get) - Loads single HTML page in `client/build/index.html`. 
 
 
+## Demo
 
+You can see how the app works on this [Heroku site](https://thawing-dusk-40044.herokuapp.com/)
 
 
 
