@@ -5,86 +5,19 @@ import { Container, Row, Col } from "../components/Grid";
 import Nav from "../components/Nav";
 
 class Saved extends Component {
-  constructor() {
-    super();
 
-    // This binding is necessary to make `this` work in the callback
-    this.handleSaveBook = this.handleSaveBook.bind(this);
-
-    this.state = {
-      books: [],
-      bookSearch: "react",
-      title: "",
-      authors: "",
-      description: "",
-      link: "",
-      thumbnail: "",
-      key: ""
+   state = {
+      books: []
     };
-  }
-
-  // When this component mounts, search for the book "P is for Potty"
+  
+  // When this component mounts, sload all books"
   componentDidMount() {
-    // https://www.googleapis.com/books/v1/volumes?q=p+is+for+potty
-    //not sure why this renders as https://www.googleapis.com/books/v1/volumes?query=react
-    API.searchBooks({ q: this.state.bookSearch })
-      .then(res => {
-        console.log(res.items);
-        this.setState({ books: res.items });
-      })
-      .catch(err => console.log(err));
+    this.loadBooks();
   }
 
-  searchBooks = query => {
-    API.searchBooks({ q: query })
-      .then(res => this.setState({ result: res.data }))
-      .catch(err => console.log(err));
-  };
-
-  handleInputChange = event => {
-    // Destructure the name and value properties off of event.target
-    // Update the appropriate state
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleFormSubmit = event => {
-    // When the form is submitted, prevent its default behavior, get books update the books state
-    event.preventDefault();
-
-    // console.log(
-    //   "handleFormSubmit in client/src/app.js captured this user input " +
-    //     this.state.bookSearch
-    // );
-    API.searchBooks({ q: this.state.bookSearch })
-      .then(res => {
-        console.log(res.items);
-        this.setState({ books: res.items });
-      })
-      .catch(err => console.log(err));
-  };
-
-  handleSaveBook = event => {
-    // event.preventDefault();
-    console.log("Button clicked");
-
-    // const { title, authors, description, link, thumbnail } = book;
-
-    console.log("handleSaveBook will save this book: " + this.state);
-    const newBook = {
-      //I have book data in books
-      id: this.id,
-      title: this.title,
-      authors: this.authors,
-      description: this.description,
-      link: this.link,
-      thumbnail: this.thumbnail
-    };
-    API.saveBook(newBook)
-      // .then(res => this.loadBooks())
-      .then(console.log("saveBook would like to to save this book" + newBook))
+  loadBooks = () => {
+    API.getBooks()
+      .then(res => this.setState({ books: res.data }))
       .catch(err => console.log(err));
   };
 
@@ -103,12 +36,12 @@ class Saved extends Component {
                     return (
                       <div>
                         <BookListItem
-                          key={book.id}
-                          title={book.volumeInfo.title}
-                          link={book.volumeInfo.infoLink}
-                          authors={book.volumeInfo.authors}
-                          description={book.volumeInfo.description}
-                          thumbnail={book.volumeInfo.imageLinks.smallThumbnail}
+                          key={book.book_}
+                          title={book.title}
+                          link={book.link}
+                          authors={book.authors}
+                          description={book.description}
+                          thumbnail={book.thumbnail}
                           handleSaveBook={this.handleSaveBook}
                         />
                       </div>

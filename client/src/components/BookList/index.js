@@ -42,9 +42,7 @@ export function BookListItem({
             link
             })
 
-          }} className="save-btn btn btn-outline-primary">Save</button>
-         
-
+          }} className="save-btn btn btn-outline-primary justify-content-end">Save</button>
             <h3>{title}</h3>
             <p>Authors: {authors}</p>
             <p>Description: {description}</p>
