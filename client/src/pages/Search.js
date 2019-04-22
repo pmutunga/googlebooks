@@ -86,12 +86,15 @@ class Search extends Component {
       link: bookData.link,
       thumbnail: bookData.thumbnail
     };
-    console.log(newBook);
+    
+    console.log(newBook.authors);
+    const authorstring= newBook.authors.slice().join(", ");
+    console.log(authorstring);
     API.saveBook({
       //I have book data in books
-      "id": bookData.id,
+      "book_id": bookData.book_id,
       "title": bookData.title,
-      "authors":  bookData.authors,
+      "authors":  authorstring,//How do I splice the array and join with comma?
       "description":  bookData.description,
       "link": bookData.link,
       "thumbnail": bookData.thumbnail
