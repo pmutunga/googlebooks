@@ -14,6 +14,7 @@ export function BookList({ children }) {
 // BookListItem renders a bootstrap list item containing data from the book api call
 export function BookListItem({
   thumbnail = "https://placehold.it/300x300",
+  book_id,
   title,
   authors,
   description,
@@ -31,7 +32,17 @@ export function BookListItem({
             <Thumbnail src={thumbnail} />
           </Col>
           <Col size="xs-8 sm-9">
-          <button onClick={handleSaveBook} className="save-btn btn btn-outline-primary">Save</button>
+          <button onClick={()=>{
+            handleSaveBook({
+            book_id,
+            thumbnail,
+            title,
+            authors,
+            description,
+            link
+            })
+
+          }} className="save-btn btn btn-outline-primary">Save</button>
          
 
             <h3>{title}</h3>

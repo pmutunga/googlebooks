@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
 
 //if deployed, use deployed database. Otherwise use the local mongoheadlines db
 var MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost/googleMongo";
+  process.env.MONGODB_URI || "mongodb://localhost/mygooglebooks";
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true }).then(function() {
   console.log("connected to db");

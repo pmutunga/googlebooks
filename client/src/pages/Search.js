@@ -70,25 +70,34 @@ class Search extends Component {
       .catch(err => console.log(err));
   };
 
-  handleSaveBook = event => {
+  handleSaveBook = (bookData) => {
     // event.preventDefault();
     console.log("Button clicked");
- 
+    console.log(bookData);//why doesn't bookdata include the key?
     // const { title, authors, description, link, thumbnail } = book;
 
-    console.log("handleSaveBook will save this book: " + this.state)
+    // console.log("handleSaveBook will save this book: " + bookData)
     const newBook = {
       //I have book data in books
-      id: this.id,
-      title: this.title,
-      authors: this.authors,
-      description: this.description,
-      link: this.link,
-      thumbnail: this.thumbnail
+      id: bookData.id,
+      title: bookData.title,
+      authors:  bookData.authors,
+      description:  bookData.description,
+      link: bookData.link,
+      thumbnail: bookData.thumbnail
     };
-    API.saveBook(newBook)
+    console.log(newBook);
+    API.saveBook({
+      //I have book data in books
+      "id": bookData.id,
+      "title": bookData.title,
+      "authors":  bookData.authors,
+      "description":  bookData.description,
+      "link": bookData.link,
+      "thumbnail": bookData.thumbnail
+    })
       // .then(res => this.loadBooks())
-      .then(console.log("saveBook would like to to save this book" + newBook))
+      .then(console.log("saveBook would like to to save this book" ))
       .catch(err => console.log(err));
   };
 
@@ -137,9 +146,11 @@ class Search extends Component {
                     return (
                       <div>
                       <BookListItem
-                        key={book.id}
+                        key={book.volumeInfo.industryIdentifiers[0].identifier}
+                        book_id={book.volumeInfo.industryIdentifiers[0].identifier}
                         title={book.volumeInfo.title}
                         link={book.volumeInfo.infoLink}
+                        // How do I slice the array and join with a comma?
                         authors={book.volumeInfo.authors}
                         description={book.volumeInfo.description}
                         thumbnail={book.volumeInfo.imageLinks.smallThumbnail}

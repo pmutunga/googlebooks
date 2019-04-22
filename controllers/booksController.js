@@ -16,10 +16,12 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
+    console.log("create is sending this book to the db");
     console.log(req.body);
+    
     db.Book
       .create(req.body)
-      .then(dbModel => res.json(dbModel))
+      .then(dbModel => res.json(dbModel))//what does this actually do?
       .catch(err => res.status(422).json(err));
   },
   update: function(req, res) {
