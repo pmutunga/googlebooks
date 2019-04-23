@@ -19,7 +19,9 @@ export function BookListItem({
   authors,
   description,
   link,
-  handleSaveBook
+  handleBook,
+  action,
+  type
 
 }) 
 
@@ -32,7 +34,7 @@ export function BookListItem({
             <Thumbnail src={thumbnail} />
           </Col>
           <Col size="xs-8 sm-9">
-          <button onClick={()=>{
+          {/* <button onClick={()=>{
             handleSaveBook({
             book_id,
             thumbnail,
@@ -42,7 +44,22 @@ export function BookListItem({
             link
             })
 
-          }} className="save-btn btn btn-outline-primary justify-content-end">Save</button>
+          }} className="save-btn btn btn-outline-primary justify-content-end">Save</button> */}
+                    <Button
+                        onClick={()=>{
+                          handleBook({
+                          book_id,
+                          thumbnail,
+                          title,
+                          authors,
+                          description,
+                          link})
+                          } }                  
+                        type={type}
+                        className="input-lg book-btn"
+                      >
+                       { action}
+                      </Button>
             <h3>{title}</h3>
             <p>Authors: {authors}</p>
             <p>Description: {description}</p>

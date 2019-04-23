@@ -27,10 +27,6 @@ export default {
    console.log("API.js/saveBook sending bookData to booksController.js ");
     return axios.post("/api/saved", bookData);
   },
-    // // Saves a book to the database
-    // saveBook: (bookData)=> {
-    //   return axios.post("/api/books/add", bookData);
-    // },
    // Deletes the book with the given id
   deleteBook: function(id) {
     return axios.delete("/api/saved/" + id)

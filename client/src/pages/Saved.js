@@ -3,13 +3,13 @@ import API from "../utils/API";
 import { BookList, BookListItem } from "../components/BookList";
 import { Container, Row, Col } from "../components/Grid";
 import Nav from "../components/Nav";
+import "./Pages.css";
 
 class Saved extends Component {
+  state = {
+    books: []
+  };
 
-   state = {
-      books: []
-    };
-  
   // When this component mounts, sload all books"
   componentDidMount() {
     this.loadBooks();
@@ -19,6 +19,15 @@ class Saved extends Component {
     API.getBooks()
       .then(res => this.setState({ books: res.data }))
       .catch(err => console.log(err));
+  };
+
+  handleDeleteBook = bookdata => {
+    // console.log(bookdata.book_id);
+    const id=bookdata.book_id;
+    API.deleteBook(id)
+    .then(res=>{this.loadBooks()})
+    // .then(console.log("deleteBook has deleted this book"))
+    .catch(err=> console.log(err))
   };
 
   render() {
@@ -36,13 +45,16 @@ class Saved extends Component {
                     return (
                       <div>
                         <BookListItem
-                          key={book.book_}
+                          key={book._id}
+                          book_id={book._id}
                           title={book.title}
                           link={book.link}
                           authors={book.authors}
                           description={book.description}
                           thumbnail={book.thumbnail}
-                          handleSaveBook={this.handleSaveBook}
+                          handleBook={this.handleDeleteBook}
+                          action="Delete"
+                          type="danger"
                         />
                       </div>
                     );

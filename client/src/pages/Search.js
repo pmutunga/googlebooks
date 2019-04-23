@@ -6,6 +6,7 @@ import { BookList, BookListItem } from "../components/BookList";
 import { Container, Row, Col } from "../components/Grid";
 import Nav from "../components/Nav";
 import Jumbotron from "../components/Jumbotron";
+import "./Pages.css"
 
 class Search extends Component {
   constructor() {
@@ -16,7 +17,7 @@ class Search extends Component {
 
     this.state = {
       books: [],
-      bookSearch: "react",
+      bookSearch: "",
       title: "",
       authors: "",
       description: "",
@@ -29,11 +30,13 @@ class Search extends Component {
 
   // When this component mounts, search for the book "P is for Potty"
   componentDidMount() {
-    // https://www.googleapis.com/books/v1/volumes?q=p+is+for+potty
+
+    const loadquery = "react";
+        // https://www.googleapis.com/books/v1/volumes?q=p+is+for+potty
     //not sure why this renders as https://www.googleapis.com/books/v1/volumes?query=react 
-    API.searchBooks({ q: this.state.bookSearch })
+    API.searchBooks({ q: loadquery })
     .then(res => {
-      console.log(res.items);
+      // console.log(res.items);
       this.setState({ books: res.items });
     })
     .catch(err => console.log(err));
@@ -75,26 +78,11 @@ class Search extends Component {
     console.log("Button clicked");
     console.log(bookData);//why doesn't bookdata include the key?
     // const { title, authors, description, link, thumbnail } = book;
-
-    // console.log("handleSaveBook will save this book: " + bookData)
-    const newBook = {
-      //I have book data in books
-      id: bookData.id,
-      title: bookData.title,
-      authors:  bookData.authors,
-      description:  bookData.description,
-      link: bookData.link,
-      thumbnail: bookData.thumbnail
-    };
-    
-    console.log(newBook.authors);
-    const authorstring= newBook.authors.slice().join(", ");
-    console.log(authorstring);
     API.saveBook({
       //I have book data in books
-      "book_id": bookData.id,
+      "book_id": bookData.book_id,
       "title": bookData.title,
-      "authors":  authorstring,//How do I splice the array and join with comma?
+      "authors": bookData.authors,//How do I splice the array and join with comma?
       "description":  bookData.description,
       "link": bookData.link,
       "thumbnail": bookData.thumbnail
@@ -153,12 +141,13 @@ class Search extends Component {
                         book_id={book.volumeInfo.industryIdentifiers[0].identifier}
                         title={book.volumeInfo.title}
                         link={book.volumeInfo.infoLink}
-                        // How do I slice the array and join with a comma?
-                        authors={book.volumeInfo.authors}
+                        // How do join with a comma?
+                        authors={book.volumeInfo.authors.join(",")}
                         description={book.volumeInfo.description}
                         thumbnail={book.volumeInfo.imageLinks.smallThumbnail}
-                        handleSaveBook={this.handleSaveBook}
-                        
+                        handleBook={this.handleSaveBook}
+                        action="Save"
+                        type="primary"
                       />
                      
                       </div>
