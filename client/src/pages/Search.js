@@ -67,7 +67,7 @@ class Search extends Component {
     // );
     API.searchBooks({ q: this.state.bookSearch })
       .then(res => {
-        console.log(res.items);
+        // console.log(res.items);
         this.setState({ books: res.items });
       })
       .catch(err => console.log(err));
@@ -75,8 +75,8 @@ class Search extends Component {
 
   handleSaveBook = (bookData) => {
     // event.preventDefault();
-    console.log("Button clicked");
-    console.log(bookData);//why doesn't bookdata include the key?
+    // console.log("Button clicked");
+    // console.log(bookData);//why doesn't bookdata include the key?
     // const { title, authors, description, link, thumbnail } = book;
     API.saveBook({
       //I have book data in books
@@ -88,7 +88,7 @@ class Search extends Component {
       "thumbnail": bookData.thumbnail
     })
       // .then(res => this.loadBooks())
-      .then(console.log("saveBook would like to to save this book" ))
+      .then(console.log("saved" ))
       .catch(err => console.log(err));
   };
 
